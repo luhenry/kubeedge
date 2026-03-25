@@ -6,6 +6,8 @@ on:
       - master
     paths:
       - 'build/docker/build-tools/build-tools.dockerfile'
+      - 'build/docker/build-tools/make-build-tools.sh'
+      - '.github/workflows/build-tools.yml'
 
 jobs:
   publish-image-to-dockerhub:
@@ -20,11 +22,12 @@ jobs:
           # for `git describe --tags` in Makefile.
           fetch-depth: 0
       - name: install QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v4.0.0
       - name: install Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v4.0.0
       - name: login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v4.0.0
+        if: github.repository_owner == 'kubeedge'
         with:
           username: ${{ secrets.DOCKERHUB_USER_NAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
